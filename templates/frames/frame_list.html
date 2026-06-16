@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Frames</title>
+</head>
+
+<body>
+
+<h1>Available Frames</h1>
+
+<form method="GET">
+
+    <p>
+
+        Size:
+
+        <input
+            type="text"
+            name="size"
+            value="{{ selected_size|default:'' }}"
+        >
+
+    </p>
+
+    <p>
+
+        Orientation:
+
+        <select name="orientation">
+
+            <option value="">
+                All
+            </option>
+
+            <option value="VERTICAL">
+                Vertical
+            </option>
+
+            <option value="HORIZONTAL">
+                Horizontal
+            </option>
+
+        </select>
+
+    </p>
+
+    <button type="submit">
+        Filter
+    </button>
+
+</form>
+
+<hr>
+
+{% for variant in frame_variants %}
+
+<div style="margin-bottom:30px;">
+
+    <img
+        src="{{ variant.frame.image.url }}"
+        alt="{{ variant.frame.name }}"
+        width="250"
+    >
+
+    <h2>
+        {{ variant.frame.name }}
+    </h2>
+
+    <p>
+        Size: {{ variant.size }}
+    </p>
+
+    <p>
+        Orientation: {{ variant.orientation }}
+    </p>
+
+    <p>
+        Price: ₹{{ variant.price }}
+    </p>
+
+</div>
+
+<hr>
+
+    <hr>
+
+{% empty %}
+
+    <p>No Frames Found</p>
+
+{% endfor %}
+
+</body>
+</html>
