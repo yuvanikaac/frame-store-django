@@ -50,6 +50,12 @@ class FrameVariant(models.Model):
         decimal_places=2
     )
 
+    image = models.ImageField(
+    upload_to='frame_variants/',
+    blank=True,
+    null=True
+    )
+
     def __str__(self):
 
         return (
