@@ -15,11 +15,25 @@
 
         Size:
 
-        <input
-            type="text"
-            name="size"
-            value="{{ selected_size|default:'' }}"
+        <select name="size">
+
+    <option value="">
+        All Sizes
+    </option>
+
+    {% for size in sizes %}
+
+        <option
+            value="{{ size }}"
         >
+
+            {{ size }}
+
+        </option>
+
+    {% endfor %}
+
+</select>
 
     </p>
 
@@ -76,8 +90,17 @@
     </p>
 
     <p>
+    Thickness: {{ variant.thickness }} 
+    </p>
+
+    <p>
         Price: ₹{{ variant.price }}
     </p>
+    <a href="{% url 'frame_detail' variant.id %}">
+    <button>
+        Select Frame
+    </button>
+    </a>
 
 </div>
 

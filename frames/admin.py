@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from .models import Frame, FrameVariant
+from .models import (
+    Frame,
+    FrameVariant,
+    CustomerUpload
+)
 
 
 @admin.register(Frame)
@@ -38,4 +42,21 @@ class FrameVariantAdmin(admin.ModelAdmin):
     search_fields = (
         'frame__name',
         'size'
+    )
+@admin.register(CustomerUpload)
+class CustomerUploadAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'user',
+        'frame_variant',
+        'status',
+        'created_at'
+    )
+
+    list_filter = (
+        'status',
+    )
+
+    search_fields = (
+        'user__email',
     )

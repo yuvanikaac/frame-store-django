@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Frame(models.Model):
@@ -44,6 +45,12 @@ class FrameVariant(models.Model):
         max_length=20,
         choices=ORIENTATION_CHOICES
     )
+    
+    thickness = models.CharField(
+    max_length=10,
+    blank=True,
+    null=True
+    )
 
     price = models.DecimalField(
         max_digits=10,
@@ -62,4 +69,41 @@ class FrameVariant(models.Model):
             f"{self.frame.name} - "
             f"{self.size} - "
             f"{self.orientation}"
+        )
+class CustomerUpload(models.Model):
+
+    STATUS_CHOICES = (
+        ('TEMP', 'Temporary'),
+        ('FINAL', 'Final'),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    frame_variant = models.ForeignKey(
+        FrameVariant,
+        on_delete=models.CASCADE
+    )
+
+    photo = models.ImageField(
+        upload_to='customer_uploads/'
+    )
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='TEMP'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+
+        return (
+            f"{self.user.email} - "
+            f"{self.frame_variant}"
         )

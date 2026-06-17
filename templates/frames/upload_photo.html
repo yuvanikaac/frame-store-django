@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Upload Photo</title>
+</head>
+
+<body>
+
+    <h1>
+        Upload Photo
+    </h1>
+
+    <h2>
+        {{ variant.frame.name }}
+    </h2>
+
+    <img
+        src="{{ variant.image.url }}"
+        width="300"
+    >
+
+    <p>
+        Size: {{ variant.size }}
+    </p>
+
+    <p>
+        Orientation: {{ variant.orientation }}
+    </p>
+
+    <p>
+        Thickness: {{ variant.thickness }}
+    </p>
+
+    <p>
+        Price: ₹{{ variant.price }}
+    </p>
+
+    <hr>
+
+    <form
+    method="POST"
+    enctype="multipart/form-data"
+>
+
+    {% csrf_token %}
+
+    <input
+        type="file"
+        name="photo"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Continue
+    </button>
+
+</form>
+
+</body>
+
+</html>

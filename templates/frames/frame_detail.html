@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Frame Details</title>
+</head>
+
+<body>
+
+    <h1>
+        {{ variant.frame.name }}
+    </h1>
+
+    <img
+        src="{{ variant.image.url }}"
+        width="400"
+    >
+
+    <p>
+        Size: {{ variant.size }}
+    </p>
+
+    <p>
+        Orientation: {{ variant.orientation }}
+    </p>
+
+    <p>
+        Thickness: {{ variant.thickness }} 
+    </p>
+
+    <p>
+        Price: ₹{{ variant.price }}
+    </p>
+
+    <hr>
+
+    <a href="{% url 'frame_list' %}">
+        <button>
+            Choose Another Frame
+        </button>
+    </a>
+
+    <a href="{% url 'upload_photo' variant.id %}">
+    <button>
+        Upload Photo & Continue
+    </button>
+</a>
+
+</body>
+
+</html>
