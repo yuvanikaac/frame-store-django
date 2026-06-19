@@ -63,6 +63,22 @@ class FrameVariant(models.Model):
     null=True
     )
 
+    photo_top = models.IntegerField(
+    default=0
+    )
+
+    photo_left = models.IntegerField(
+    default=0
+    )
+
+    photo_width = models.IntegerField(
+    default=0
+    )
+
+    photo_height = models.IntegerField(
+    default=0
+    )
+
     def __str__(self):
 
         return (
@@ -89,6 +105,18 @@ class CustomerUpload(models.Model):
 
     photo = models.ImageField(
         upload_to='customer_uploads/'
+    )
+
+    position_x = models.IntegerField(
+    default=0
+    )
+
+    position_y = models.IntegerField(
+        default=0
+    )
+
+    zoom_level = models.FloatField(
+        default=1.0
     )
 
     status = models.CharField(

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+</head>
+<body>
+
+<h1>My Cart</h1>
+
+{% for item in cart.items.all %}
+
+    <hr>
+
+    <p>
+        Frame:
+        {{ item.customer_upload.frame_variant.frame.name }}
+    </p>
+
+    <p>
+        Size:
+        {{ item.customer_upload.frame_variant.size }}
+    </p>
+
+    <p>
+        Price:
+        ₹{{ item.customer_upload.frame_variant.price }}
+    </p>
+
+    <p>
+        Quantity:
+        {{ item.quantity }}
+    </p>
+    <a href="{% url 'remove_cart_item' item.id %}">
+    Remove
+</a>
+
+{% empty %}
+
+    <p>
+        Cart is empty.
+    </p>
+
+{% endfor %}
+
+<hr>
+
+<h2>
+    Total: ₹{{ total }}
+</h2>
+<hr>
+
+<a href="{% url 'checkout' %}">
+    <button>
+        Proceed To Checkout
+    </button>
+</a>
+
+</body>
+</html>

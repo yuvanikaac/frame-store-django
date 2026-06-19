@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Wall Preview</title>
+
+    <style>
+
+        body{
+            margin:0;
+        }
+
+        .wall{
+            width:100vw;
+            height:100vh;
+
+            background:#d9d9d9;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+        }
+
+        .frame-container{
+            position:relative;
+        }
+
+        .frame{
+            width:100%;
+            position:relative;
+            z-index:2;
+            pointer-events:none;
+        }
+
+        .inner-photo{
+            position:absolute;
+            overflow:hidden;
+            z-index:1;
+        }
+
+        .photo{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="wall">
+
+    <div class="frame-container">
+
+        <div class="inner-photo" id="innerPhoto">
+
+            <img
+                src="{{ upload.photo.url }}"
+                class="photo"
+                id="photo"
+            >
+
+        </div>
+
+        <img
+            src="{{ upload.frame_variant.image.url }}"
+            class="frame"
+            id="frame"
+        >
+
+    </div>
+
+</div>
+
+<script>
+const FRAME_DISPLAY_SIZES = {
+
+    "6x4": 120,
+
+    "6x8": 140,
+
+    "6x9": 150,
+
+    "8x10": 180,
+
+    "10x10": 200,
+
+    "10x12": 220,
+
+    "12x12": 240,
+
+    "12x15": 260,
+
+    "12x18": 300,
+
+    "16x20": 380,
+
+    "16x24": 450,
+
+    "20x24": 520,
+
+    "20x30": 650,
+
+    "30x40": 850
+
+};
+const frameSize =
+    "{{ upload.frame_variant.size }}";
+const frame = document.getElementById("frame");
+const frameContainer =
+    document.querySelector(".frame-container");
+
+const displayWidth =
+    FRAME_DISPLAY_SIZES[frameSize] || 350;
+
+frameContainer.style.width =
+    displayWidth + "px";
+
+const innerPhoto =
+    document.getElementById("innerPhoto");
+const photo =
+    document.getElementById("photo");
+frame.onload = function() {
+
+    const frameWidth =
+        frame.naturalWidth;
+
+    const frameHeight =
+        frame.naturalHeight;
+
+    const photoTop =
+        Number("{{ upload.frame_variant.photo_top }}");
+
+    const photoLeft =
+        Number("{{ upload.frame_variant.photo_left }}");
+
+    const photoWidth =
+        Number("{{ upload.frame_variant.photo_width }}");
+
+    const photoHeight =
+        Number("{{ upload.frame_variant.photo_height }}");
+
+    innerPhoto.style.top =
+        (photoTop / frameHeight * 100) + "%";
+
+    innerPhoto.style.left =
+        (photoLeft / frameWidth * 100) + "%";
+
+    innerPhoto.style.width =
+        (photoWidth / frameWidth * 100) + "%";
+
+    innerPhoto.style.height =
+        (photoHeight / frameHeight * 100) + "%";
+    const previewFrameWidth = 500;
+        const wallFrameWidth = 350;
+
+        const scaleFactor =
+            wallFrameWidth / previewFrameWidth;
+
+        const posX =
+            Number("{{ upload.position_x }}") *
+            scaleFactor;
+
+    const posY =
+        Number("{{ upload.position_y }}") *
+        scaleFactor;
+
+    const zoomLevel =
+        Number("{{ upload.zoom_level }}");
+
+    photo.style.transform =
+        `translate(${posX}px, ${posY}px) scale(${zoomLevel})`;
+
+    photo.style.transformOrigin =
+        "center center";
+    };
+
+</script>
+<br><br>
+
+<a href="{% url 'add_to_cart' upload.id %}">
+    <button>
+        Add To Cart
+    </button>
+</a>
+
+</body>
+</html>

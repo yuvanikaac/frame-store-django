@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Checkout</title>
+</head>
+
+<body>
+
+<h1>Checkout</h1>
+
+<h2>Total: ₹{{ total }}</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <p>
+        Full Name
+    </p>
+
+    <input
+        type="text"
+        name="full_name"
+        required
+    >
+
+    <p>
+        Phone Number
+    </p>
+
+    <input
+        type="text"
+        name="phone_number"
+        required
+    >
+
+    <p>
+        Address Line 1
+    </p>
+
+    <input
+        type="text"
+        name="address_line_1"
+        required
+    >
+
+    <p>
+        Address Line 2
+    </p>
+
+    <input
+        type="text"
+        name="address_line_2"
+    >
+
+    <p>
+        City
+    </p>
+
+    <input
+        type="text"
+        name="city"
+        required
+    >
+
+    <p>
+        State
+    </p>
+
+    <input
+        type="text"
+        name="state"
+        required
+    >
+
+    <p>
+        Pincode
+    </p>
+
+    <input
+        type="text"
+        name="pincode"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Place Order
+    </button>
+
+</form>
+
+</body>
+
+</html>

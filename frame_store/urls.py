@@ -35,6 +35,10 @@ urlpatterns = [
         '',
         include('frames.urls')
     ),
+    path(
+        '',
+        include('orders.urls')
+    ),
 ]
 
 if settings.DEBUG:

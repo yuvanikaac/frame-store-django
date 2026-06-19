@@ -32,6 +32,7 @@ class FrameVariantAdmin(admin.ModelAdmin):
         'frame',
         'size',
         'orientation',
+        'thickness',
         'price'
     )
 
@@ -42,6 +43,20 @@ class FrameVariantAdmin(admin.ModelAdmin):
     search_fields = (
         'frame__name',
         'size'
+    )
+
+    fields = (
+        'frame',
+        'size',
+        'orientation',
+        'thickness',
+        'price',
+        'image',
+
+        'photo_top',
+        'photo_left',
+        'photo_width',
+        'photo_height',
     )
 @admin.register(CustomerUpload)
 class CustomerUploadAdmin(admin.ModelAdmin):

@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from .models import FrameVariant
 from .models import CustomerUpload
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 def frame_list(request):
@@ -77,7 +79,7 @@ def upload_photo(request, variant_id):
 
         if photo:
 
-            CustomerUpload.objects.create(
+            upload = CustomerUpload.objects.create(
 
                 user=request.user,
 
@@ -88,9 +90,9 @@ def upload_photo(request, variant_id):
                 status='TEMP'
             )
 
-            return render(
-                request,
-                'frames/upload_success.html'
+            return redirect(
+                'preview_frame',
+                upload_id=upload.id
             )
 
     context = {
@@ -102,3 +104,70 @@ def upload_photo(request, variant_id):
         'frames/upload_photo.html',
         context
     )
+
+    
+def preview_frame(request, upload_id):
+
+    upload = CustomerUpload.objects.get(
+        id=upload_id
+    )
+
+    context = {
+        'upload': upload
+    }
+
+    return render(
+        request,
+        'frames/preview.html',
+        context
+    )
+from django.http import HttpResponse
+
+def wall_preview(request, upload_id):
+
+    upload = CustomerUpload.objects.get(
+        id=upload_id
+    )
+
+    context = {
+        'upload': upload
+    }
+
+    return render(
+        request,
+        'frames/wall_preview.html',
+        context
+    )
+@csrf_exempt
+def save_preview(request, upload_id):
+
+    if request.method == 'POST':
+
+        upload = CustomerUpload.objects.get(
+            id=upload_id
+        )
+
+        upload.position_x = request.POST.get(
+            'position_x',
+            0
+        )
+
+        upload.position_y = request.POST.get(
+            'position_y',
+            0
+        )
+
+        upload.zoom_level = request.POST.get(
+            'zoom_level',
+            1
+        )
+
+        upload.save()
+
+        return JsonResponse({
+            'success': True
+        })
+
+    return JsonResponse({
+        'success': False
+    })

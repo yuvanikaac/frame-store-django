@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Preview</title>
+
+    <style>
+
+        .frame-container{
+            position: relative;
+            width: 500px;
+            margin: auto;
+        }
+
+        .frame{
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            pointer-events:none;
+        }
+
+        .photo{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+
+        cursor:grab;
+
+        user-select:none;
+
+        transform-origin:center center;
+    }
+
+        .inner-photo{
+            position:absolute;
+            overflow:hidden;
+            z-index:1;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Preview</h1>
+    <input
+    type="hidden"
+    id="uploadId"
+    value="{{ upload.id }}"
+>
+
+    <div class="frame-container">
+
+    <div class="inner-photo" id="innerPhoto">
+
+        <img
+            src="{{ upload.photo.url }}"
+            class="photo"
+            id="photo"
+            draggable="false"
+        >
+
+    </div>
+
+    <img
+        src="{{ upload.frame_variant.image.url }}"
+        class="frame"
+        id="frame"
+    >
+
+</div>
+<br><br>
+
+<button
+    id="wallButton"
+    onclick="alert('Button Clicked')"
+>
+    View On Wall
+</button>
+
+    <script>
+
+        const frame = document.getElementById("frame");
+        const photo = document.getElementById("photo");
+
+        frame.onload = function() {
+
+            const frameWidth = frame.naturalWidth;
+            const frameHeight = frame.naturalHeight;
+
+            const photoTop =Number("{{ upload.frame_variant.photo_top }}");
+
+            const photoLeft =Number("{{ upload.frame_variant.photo_left }}");
+
+             const photoWidth =Number("{{ upload.frame_variant.photo_width }}");
+
+            const photoHeight =Number("{{ upload.frame_variant.photo_height }}");
+            const innerPhoto =document.getElementById("innerPhoto");
+innerPhoto.style.top  =
+    (photoTop / frameHeight * 100) + "%";
+
+innerPhoto.style.left =
+    (photoLeft / frameWidth * 100) + "%";
+
+innerPhoto.style.width =
+    (photoWidth / frameWidth * 100) + "%";
+
+innerPhoto.style.height =
+    (photoHeight / frameHeight * 100) + "%";
+        };
+
+        let scale = 1;
+
+        let posX = 0;
+        let posY = 0;
+
+        let isDragging = false;
+
+        let startX;
+        let startY;
+
+        photo.addEventListener("mousedown", function(e){
+
+            isDragging = true;
+
+            startX = e.clientX - posX;
+            startY = e.clientY - posY;
+
+            photo.style.cursor = "grabbing";
+        });
+
+        window.addEventListener("mousemove", function(e){
+
+            if(!isDragging) return;
+
+            posX = e.clientX - startX;
+            posY = e.clientY - startY;
+
+            updateTransform();
+        });
+
+        window.addEventListener("mouseup", function(){
+
+            isDragging = false;
+
+            photo.style.cursor = "grab";
+        });
+
+        photo.addEventListener("wheel", function(e){
+
+            e.preventDefault();
+
+            if(e.deltaY < 0){
+
+                scale += 0.1;
+
+            } else {
+
+                scale -= 0.1;
+
+                if(scale < 1){
+                    scale = 1;
+                }
+            }
+
+            updateTransform();
+        });
+
+        function updateTransform(){
+
+            photo.style.transform =
+                `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+
+       ;
+
+const wallButton =
+    document.getElementById("wallButton");
+
+wallButton.addEventListener(
+    "click",
+    function(){
+
+        const uploadId =
+            document.getElementById(
+                "uploadId"
+            ).value;
+
+        fetch(
+            `/customer/save-preview/${uploadId}/`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                    "application/x-www-form-urlencoded"
+                },
+
+                body:
+                    `position_x=${posX}` +
+                    `&position_y=${posY}` +
+                    `&zoom_level=${scale}`
+            }
+        )
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            if(data.success){
+
+                window.location.href =
+                    `/customer/wall-preview/${uploadId}/`;
+
+            }
+
+        });
+
+    }
+);
+    </script>
+
+</body>
+
+</html>
