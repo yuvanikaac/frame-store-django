@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'settings_app',
     'staff',
     'reports',
+    'staff_portal',
 ]
 
 MIDDLEWARE = [

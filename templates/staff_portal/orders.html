@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Staff Orders</title>
+</head>
+
+<body>
+
+<h1>Staff Orders</h1>
+
+{% for order in orders %}
+
+<hr>
+
+<h2>
+    Order #{{ order.id }}
+</h2>
+
+<p>
+    Customer:
+    {{ order.full_name }}
+</p>
+
+<p>
+    Phone:
+    {{ order.phone_number }}
+</p>
+
+<p>
+    Status:
+    {{ order.status }}
+</p>
+{% if order.status == 'PENDING' %}
+
+<a href="{% url 'update_order_status' order.id 'PROCESSING' %}">
+    <button>
+        Mark Processing
+    </button>
+</a>
+
+{% elif order.status == 'PROCESSING' %}
+
+<a href="{% url 'update_order_status' order.id 'PRINTED' %}">
+    <button>
+        Mark Printed
+    </button>
+</a>
+
+{% elif order.status == 'PRINTED' %}
+
+<a href="{% url 'update_order_status' order.id 'SHIPPED' %}">
+    <button>
+        Mark Shipped
+    </button>
+</a>
+
+{% elif order.status == 'SHIPPED' %}
+
+<a href="{% url 'update_order_status' order.id 'DELIVERED' %}">
+    <button>
+        Mark Delivered
+    </button>
+</a>
+
+{% endif %}
+
+<p>
+    Total:
+    ₹{{ order.total_amount }}
+</p>
+
+<h3>
+    Order Items
+</h3>
+
+{% for item in order.items.all %}
+
+    <img
+        src="{{ item.customer_upload.photo.url }}"
+        width="150"
+    >
+    <br><br>
+
+<a
+    href="{{ item.customer_upload.photo.url }}"
+    target="_blank"
+    download
+>
+
+    <button>
+        Download Original Photo
+    </button>
+
+</a>
+
+<br><br>
+
+    <p>
+        Frame:
+        {{ item.customer_upload.frame_variant.frame.name }}
+    </p>
+
+    <p>
+        Size:
+        {{ item.customer_upload.frame_variant.size }}
+    </p>
+
+    <p>
+        Orientation:
+        {{ item.customer_upload.frame_variant.orientation }}
+    </p>
+
+    <p>
+        Thickness:
+        {{ item.customer_upload.frame_variant.thickness }}
+    </p>
+
+    <p>
+        Quantity:
+        {{ item.quantity }}
+    </p>
+
+    <p>
+        Price:
+        ₹{{ item.price }}
+    </p>
+
+    <hr>
+
+{% endfor %}
+
+{% empty %}
+
+<p>
+    No Orders Found
+</p>
+
+{% endfor %}
+
+</body>
+
+</html>

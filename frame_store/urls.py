@@ -39,6 +39,10 @@ urlpatterns = [
         '',
         include('orders.urls')
     ),
+    path(
+        '',
+        include('staff_portal.urls')
+),
 ]
 
 if settings.DEBUG:
